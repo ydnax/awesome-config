@@ -32,9 +32,9 @@ layouts =
     awful.layout.suit.tile,
     awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier
+    awful.layout.suit.magnifier,
+    awful.layout.suit.tile.bottom,
 --    awful.layout.suit.tile.left,
---    awful.layout.suit.tile.bottom,
 --    awful.layout.suit.tile.top,
 --    awful.layout.suit.fair,
 --    awful.layout.suit.fair.horizontal,
@@ -45,11 +45,11 @@ layouts =
 
 -- {{{ Tags
  tags = {
-   names  = { "www", "info", "shells", "work", "overlay" },
+   names  = { "w", "i", "s", "w", "o" },
    layout = { layouts[3], layouts[3], layouts[3], layouts[3], layouts[3]}
- }
+ }°
  for s = 1, screen.count() do
-     -- Each screen has its own tag table.
+--     -- Each screen has its own tag table.
      tags[s] = awful.tag(tags.names, s, tags.layout)
  end
 -- }}}
@@ -74,7 +74,7 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = awful.widget.textclock({ align = "right" })
+mytextclock = awful.widget.textclock({ align = "left" })
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
@@ -142,13 +142,13 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
-            mylauncher,
+            s == 1 and mylauncher  or nil,
+            s == 1 and mytextclock or nil,
             mytaglist[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
-        mytextclock,
         s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
