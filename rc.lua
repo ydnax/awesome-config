@@ -152,8 +152,8 @@ end
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
     --awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 6, awful.tag.viewnext),
-    awful.button({ }, 7, awful.tag.viewprev)
+    --awful.button({ }, 6, awful.tag.viewnext),
+    --awful.button({ }, 7, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -193,7 +193,6 @@ globalkeys = awful.util.table.join(
 
     -- Standard program
     awful.key({ modkey,           }, "Return",function () awful.util.spawn(terminal) end),
-    awful.key({ "Alt"             }, "F1",    function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     --awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -215,7 +214,11 @@ globalkeys = awful.util.table.join(
                   mypromptbox[mouse.screen].widget,
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
-              end)
+              end),
+    --old fluxbox bindings
+    awful.key({ "Mod1"            }, "F1",    function () awful.util.spawn(terminal) end),
+    awful.key({ "Mod1"            }, "F2",    function () mypromptbox[mouse.screen]:run() end)
+    --file manager here ;)
 )
 
 clientkeys = awful.util.table.join(
@@ -231,7 +234,9 @@ clientkeys = awful.util.table.join(
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical
-        end)
+        end),
+    --fluxbox keys
+    awful.key({ "Mod1"            }, "F4",    function (c) c:kill()                         end)
 )
 
 -- Compute the maximum number of digit we need, limited to 9
