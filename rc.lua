@@ -151,6 +151,10 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext),
+    awful.key({ "Control",           }, "-",   awful.tag.viewprev),
+    awful.key({ modkey,           }, "-",   awful.tag.viewprev),
+    awful.key({ "Control",           }, "+",  awful.tag.viewnext),
+    awful.key({ modkey,           }, "+",  awful.tag.viewnext),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     awful.key({ modkey,           }, "j",
