@@ -48,27 +48,12 @@ layouts =
  end
 -- }}}
 
--- {{{ Menu
--- Create a laucher widget and a main menu
-myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua" },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
-}
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu},
-                                    { "open terminal", terminal }
-                                  }
-                        })
-
-mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
-                                     menu = mymainmenu })
--- }}}
 
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "left" })
+
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
@@ -146,14 +131,18 @@ for s = 1, screen.count() do
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
+    mywibox[s]:buttons(awful.util.table.join(
+      awful.button({ }, 7, awful.tag.viewnext),
+      awful.button({ }, 6, awful.tag.viewprev)
+    ))
 end
 -- }}}
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    --awful.button({ }, 3, function () mymainmenu:toggle() end),
-    --awful.button({ }, 6, awful.tag.viewnext),
-    --awful.button({ }, 7, awful.tag.viewprev)
+    awful.button({ }, 3, function () mymainmenu:toggle() end),
+    awful.button({ }, 7, awful.tag.viewnext),
+    awful.button({ }, 6, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -161,7 +150,7 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext),
-    --awful.key({                   }, 6, awful.tag.viewprev),
+    --awful.key({                   }, 4, awful.tag.viewprev),
     --awful.key({                   }, 7, awful.tag.viewnext),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
@@ -184,6 +173,13 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "Tab",
+        function ()
+            awful.client.focus.history.previous()
+            if client.focus then
+                client.focus:raise()
+            end
+        end),
+    awful.key({ "Mod1"           }, "Tab",
         function ()
             awful.client.focus.history.previous()
             if client.focus then
@@ -281,7 +277,18 @@ end
 clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
-    awful.button({ modkey }, 3, awful.mouse.client.resize))
+    awful.button({ modkey }, 3, awful.mouse.client.resize),
+    awful.button({ }, 7, awful.tag.viewnext),
+    awful.button({ }, 6, awful.tag.viewprev)
+--    awful.button({2}, 4, function ()
+--                            awful.client.focus.byidx(1)
+--                            if client.focus then client.focus:raise() end
+--                        end),
+--    awful.button({2}, 5, function ()
+--                            awful.client.focus.byidx(-1)
+--                            if client.focus then client.focus:raise() end
+--                        end)
+)
 
 -- Set keys
 root.keys(globalkeys)
