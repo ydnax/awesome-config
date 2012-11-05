@@ -7,16 +7,25 @@ require("beautiful")
 -- Notification library
 require("naughty")
 
--- {{{ Variable definitions
+vicious = require("vicious")
+memwidget = awful.widget.progressbar()
+memwidget:set_width(25)
+--memwidget:set_height(17)
+memwidget:set_vertical(false)
+--memwidget:set_background_color("#494B4F")
+memwidget:set_border_color(nil)
+memwidget:set_color("#AECF96")
+memwidget:set_gradient_colors({ "green", "green", "yellow", "red" })
+vicious.register(memwidget, vicious.widgets.mem, "$1", 1)
+
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/usr/share/awesome/themes/default/theme.lua")
-
+terminal = "urxvtc"
 -- awful.util.spawn_with_shell("feh --bg-tile ~/.backgrounds/portal_sym.jpg")                                                                                                     
 modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-layouts =
-{
+layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.max,
@@ -32,20 +41,18 @@ layouts =
 }
 
 
--- {{{ Tags
+-- Tags
  tags = {
-   names  = { "w", "i", "s", "w", "o" },
+   names  = { "⌂", "✉", "␖", "☭", "…" },
    layout = { layouts[3], layouts[3], layouts[3], layouts[3], layouts[3]}
  }
  for s = 1, screen.count() do
---     -- Each screen has its own tag table.
+-- Each screen has its own tag table.
      tags[s] = awful.tag(tags.names, s, tags.layout)
  end
--- }}}
 
 
 
--- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "left" })
 
@@ -124,6 +131,7 @@ for s = 1, screen.count() do
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
+        s == 1 and memwidget.widget or nil,
         s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -135,14 +143,13 @@ for s = 1, screen.count() do
 end
 -- }}}
 
--- {{{ Mouse bindings
+-- Mouse bindings
 root.buttons(awful.util.table.join(
     awful.button({ }, 7, awful.tag.viewnext),
     awful.button({ }, 6, awful.tag.viewprev)
 ))
--- }}}
 
--- {{{ Key bindings
+-- Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext),
@@ -289,9 +296,8 @@ clientbuttons = awful.util.table.join(
 
 -- Set keys
 root.keys(globalkeys)
--- }}}
 
--- {{{ Rules
+-- Rules
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
@@ -312,9 +318,9 @@ awful.rules.rules = {
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
 }
--- }}}
 
--- {{{ Signals
+
+-- Signals
 -- Signal function to execute when a new client appears.
 client.add_signal("manage", function (c, startup)
     -- Add a titlebar
@@ -343,4 +349,3 @@ end)
 
 client.add_signal("focus",   function(c) c.border_color = beautiful.border_focus  end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
--- }}}
